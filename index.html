@@ -160,132 +160,174 @@ Experiments show that VAP consistently outperforms generic policies and token-le
 
 <section class="section">
   <div class="container is-max-desktop">
-    <!-- Method. -->
     <div class="columns is-centered has-text-centered">
       <div class="column is-full-width">
-        <h2 class="title is-3">Method</h2>
+        <h2 class="title is-3">Method: Visual Attentive Prompting</h2>
         <div class="content has-text-centered">
           <img src="./static/images/pipeline.png"
                alt="VAP Pipeline"
                style="width: 100%; max-width: 900px;"/>
-          <p class="has-text-justified" style="margin-top: 1rem;">
-            <strong>Figure 1. VAP Pipeline.</strong> The method grounds the user-specific object from reference images and generates a visual prompt (red tint) to guide the frozen VLA model.
+        </div>
+        <div class="content has-text-justified">
+          <p>
+            VAP is a <strong>training-free</strong> framework that enables frozen VLA models to understand personalized references.
+            Given a few reference images of a user's object (e.g., "my toy owl"), VAP first grounds the object in the current scene using an open-vocabulary detector and a retriever. 
+            It then generates a <strong>Visual Prompt</strong> by overlaying a semi-transparent red tint on the target object and rewrites the text instruction (e.g., "my toy owl" &rarr; "red toy owl"). 
+            This explicit visual cue guides the VLA's attention, allowing it to manipulate specific instances among visually similar distractors without any fine-tuning.
           </p>
         </div>
       </div>
     </div>
-    <!--/ Method. -->
-  </div>
+    </div>
 </section>
 
 
 <section class="section">
   <div class="container is-max-desktop">
-    <!-- Results. -->
     <div class="columns is-centered has-text-centered">
       <div class="column is-full-width">
-        <h2 class="title is-3">Results</h2>
+        <h2 class="title is-3">Qualitative Results</h2>
         <div class="content has-text-justified">
           <p>
-            Qualitative results on <strong>Personalized-SIMPLER</strong> and <strong>Personalized-VLABench</strong> tasks. VAP successfully identifies and manipulates user-specific objects among visually similar distractors.
+            We evaluate VAP on three challenging simulation benchmarks. In each task, the robot must identify and manipulate a <strong>user-specific object</strong> (e.g., "my shaver") while ignoring visually similar distractors present in the scene.
+            The videos below demonstrate how VAP successfully grounds the target instance and guides the frozen VLA policy to complete the task.
           </p>
         </div>
 
-        <!-- SIMPLER Bridge Videos -->
-        <h3 class="title is-4" style="margin-top: 2rem;">SIMPLER Bridge</h3>
+        <h3 class="title is-4" style="margin-top: 2rem;">1. Personalized-SIMPLER (WidowX)</h3>
+        <div class="content has-text-justified">
+          <p>
+            Evaluation on the WidowX arm using the Bridge dataset setting. These tasks involve pick-and-place operations in cluttered environments where distractors closely resemble the target object.
+          </p>
+        </div>
         <div class="columns is-multiline">
           <div class="column is-half">
-            <video autoplay controls muted loop playsinline height="100%">
-              <source src="./static/videos/simpler_bridge_camera.mp4"
-                      type="video/mp4">
-            </video>
+            <div class="content">
+              <p class="has-text-weight-semibold">"Put my camera on towel"</p>
+              <video autoplay controls muted loop playsinline height="100%">
+                <source src="./static/videos/simpler_bridge_camera.mp4" type="video/mp4">
+              </video>
+            </div>
           </div>
           <div class="column is-half">
-            <video autoplay controls muted loop playsinline height="100%">
-              <source src="./static/videos/simpler_bridge_owl.mp4"
-                      type="video/mp4">
-            </video>
+            <div class="content">
+              <p class="has-text-weight-semibold">"Put my owl figurine on plate"</p>
+              <video autoplay controls muted loop playsinline height="100%">
+                <source src="./static/videos/simpler_bridge_owl.mp4" type="video/mp4">
+              </video>
+            </div>
           </div>
           <div class="column is-half">
-            <video autoplay controls muted loop playsinline height="100%">
-              <source src="./static/videos/simpler_bridge_shaver.mp4"
-                      type="video/mp4">
-            </video>
+            <div class="content">
+              <p class="has-text-weight-semibold">"Pick my shaver"</p>
+              <video autoplay controls muted loop playsinline height="100%">
+                <source src="./static/videos/simpler_bridge_shaver.mp4" type="video/mp4">
+              </video>
+            </div>
           </div>
           <div class="column is-half">
-            <video autoplay controls muted loop playsinline height="100%">
-              <source src="./static/videos/simpler_bridge_straw_cup.mp4"
-                      type="video/mp4">
-            </video>
+            <div class="content">
+              <p class="has-text-weight-semibold">"Put my straw cup in basket"</p>
+              <video autoplay controls muted loop playsinline height="100%">
+                <source src="./static/videos/simpler_bridge_straw_cup.mp4" type="video/mp4">
+              </video>
+            </div>
           </div>
         </div>
 
-        <!-- SIMPLER Fractal Videos -->
-        <h3 class="title is-4" style="margin-top: 2rem;">SIMPLER Fractal</h3>
+        <h3 class="title is-4" style="margin-top: 2rem;">2. Personalized-SIMPLER (Google Robot)</h3>
+        <div class="content has-text-justified">
+          <p>
+             Evaluation on the Google Robot using the Fractal dataset setting. We test robustness across 'Visual Matching' (seen environments) and 'Visual Variant' (unseen backgrounds/lighting) tracks.
+          </p>
+        </div>
         <div class="columns is-multiline">
           <div class="column is-half">
-            <video autoplay controls muted loop playsinline height="100%">
-              <source src="./static/videos/simpler_fractal_bottle_matching.mp4"
-                      type="video/mp4">
-            </video>
+            <div class="content">
+              <p class="has-text-weight-semibold">"Pick my pen holder" (Visual Matching)</p>
+              <video autoplay controls muted loop playsinline height="100%">
+                <source src="./static/videos/simpler_fractal_pen_holder_matching.mp4" type="video/mp4">
+              </video>
+            </div>
           </div>
           <div class="column is-half">
-            <video autoplay controls muted loop playsinline height="100%">
-              <source src="./static/videos/simpler_fractal_bottle_variant.mp4"
-                      type="video/mp4">
-            </video>
+            <div class="content">
+              <p class="has-text-weight-semibold">"Pick my pen holder" (Visual Variant)</p>
+              <video autoplay controls muted loop playsinline height="100%">
+                <source src="./static/videos/simpler_fractal_pen_holder_variant.mp4" type="video/mp4">
+              </video>
+            </div>
           </div>
           <div class="column is-half">
-            <video autoplay controls muted loop playsinline height="100%">
-              <source src="./static/videos/simpler_fractal_pen_holder_matching.mp4"
-                      type="video/mp4">
-            </video>
+            <div class="content">
+              <p class="has-text-weight-semibold">"Move my bottle near coke can" (Visual Matching)</p>
+              <video autoplay controls muted loop playsinline height="100%">
+                <source src="./static/videos/simpler_fractal_bottle_matching.mp4" type="video/mp4">
+              </video>
+            </div>
           </div>
           <div class="column is-half">
-            <video autoplay controls muted loop playsinline height="100%">
-              <source src="./static/videos/simpler_fractal_pen_holder_variant.mp4"
-                      type="video/mp4">
-            </video>
+            <div class="content">
+              <p class="has-text-weight-semibold">"Move my bottle near coke can" (Visual Variant)</p>
+              <video autoplay controls muted loop playsinline height="100%">
+                <source src="./static/videos/simpler_fractal_bottle_variant.mp4" type="video/mp4">
+              </video>
+            </div>
           </div>
         </div>
 
-        <!-- VLABench Videos -->
-        <h3 class="title is-4" style="margin-top: 2rem;">VLABench</h3>
+        <h3 class="title is-4" style="margin-top: 2rem;">3. Personalized-VLABench</h3>
+        <div class="content has-text-justified">
+          <p>
+            Multi-view selection tasks on a Franka Emika Panda arm. The agent must identify the correct user object from three camera views (Front, Side, Wrist) and touch it.
+          </p>
+        </div>
         <div class="columns is-multiline">
-          <div class="column is-half">
-            <video autoplay controls muted loop playsinline height="100%">
-              <source src="./static/videos/vlabech_leather_bag.mp4"
-                      type="video/mp4">
-            </video>
+          <div class="column is-one-third">
+            <div class="content">
+              <p class="has-text-weight-semibold">"Select my leather bag"</p>
+              <video autoplay controls muted loop playsinline height="100%">
+                <source src="./static/videos/vlabench_leather_bag.mp4" type="video/mp4">
+              </video>
+            </div>
           </div>
-          <div class="column is-half">
-            <video autoplay controls muted loop playsinline height="100%">
-              <source src="./static/videos/vlabench_cat.mp4"
-                      type="video/mp4">
-            </video>
+          <div class="column is-one-third">
+            <div class="content">
+              <p class="has-text-weight-semibold">"Select my cat figurine"</p>
+              <video autoplay controls muted loop playsinline height="100%">
+                <source src="./static/videos/vlabench_cat.mp4" type="video/mp4">
+              </video>
+            </div>
           </div>
-          <div class="column is-half">
-            <video autoplay controls muted loop playsinline height="100%">
-              <source src="./static/videos/vlabench_cup.mp4"
-                      type="video/mp4">
-            </video>
+          <div class="column is-one-third">
+            <div class="content">
+              <p class="has-text-weight-semibold">"Select my cup"</p>
+              <video autoplay controls muted loop playsinline height="100%">
+                <source src="./static/videos/vlabench_cup.mp4" type="video/mp4">
+              </video>
+            </div>
           </div>
-          <div class="column is-half">
-            <video autoplay controls muted loop playsinline height="100%">
-              <source src="./static/videos/vlabench_house.mp4"
-                      type="video/mp4">
-            </video>
+          
+          <div class="column is-one-third is-offset-one-sixth">
+            <div class="content">
+              <p class="has-text-weight-semibold">"Select my miniature house"</p>
+              <video autoplay controls muted loop playsinline height="100%">
+                <source src="./static/videos/vlabench_house.mp4" type="video/mp4">
+              </video>
+            </div>
           </div>
-          <div class="column is-half">
-            <video autoplay controls muted loop playsinline height="100%">
-              <source src="./static/videos/vlabench_shoe.mp4"
-                      type="video/mp4">
-            </video>
+          <div class="column is-one-third">
+            <div class="content">
+              <p class="has-text-weight-semibold">"Select my shoe"</p>
+              <video autoplay controls muted loop playsinline height="100%">
+                <source src="./static/videos/vlabench_shoe.mp4" type="video/mp4">
+              </video>
+            </div>
           </div>
         </div>
+
       </div>
     </div>
-    <!--/ Results. -->
   </div>
 </section>
 
