@@ -65,25 +65,36 @@
 
     /* 4. ★★★ MOBILE CRITICAL FIXES ★★★ */
     @media screen and (max-width: 768px) {
+      /* [Fix 0] Global Container Fix */
+      .container.is-max-desktop {
+        max-width: 100% !important;
+        padding-left: 0.75rem !important;
+        padding-right: 0.75rem !important;
+      }
+
       /* [Fix 1] Hero Teaser Section - Container & Padding */
       .hero.teaser .hero-body {
-        padding: 1.5rem 0.75rem !important; /* 최소 패딩으로 공간 최대 활용 */
+        padding: 1.5rem 0 !important;
+        overflow-x: hidden;
       }
 
       .hero.teaser .container {
-        padding-left: 0.75rem !important;
-        padding-right: 0.75rem !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        max-width: 100% !important;
+        overflow-x: hidden;
       }
 
       /* [Fix 2] Banner Image Section */
       .hero.teaser .columns {
         margin-left: 0 !important;
         margin-right: 0 !important;
+        width: 100%;
       }
 
       .hero.teaser .column {
-        padding-left: 0.5rem !important;
-        padding-right: 0.5rem !important;
+        padding-left: 0.75rem !important;
+        padding-right: 0.75rem !important;
       }
 
       .banner-image {
@@ -91,25 +102,40 @@
         max-width: 100% !important;
         height: auto !important;
         object-fit: contain;
-        border-radius: 8px !important; /* 모바일에서 약간 작은 radius */
+        border-radius: 8px !important;
       }
 
       /* [Fix 3] Text Content - Full Width & Readable Font */
       .hero.teaser .is-four-fifths {
-        width: 100% !important; /* 모바일에서 전체 너비 사용 */
-        padding-left: 0.5rem !important;
-        padding-right: 0.5rem !important;
+        width: 100% !important;
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
       }
 
       .hero.teaser .content.has-text-justified {
-        font-size: 1rem !important; /* 모바일에서 약간 작은 폰트 */
-        text-align: left !important; /* justify보다 left가 모바일에서 더 읽기 쉬움 */
+        font-size: 1rem !important;
+        text-align: left !important;
       }
 
-      /* [Fix 4] Carousel Container - Prevent Overflow */
+      /* [Fix 4] Carousel Container - Prevent Overflow & Single Slide */
       .carousel.results-carousel {
         width: 100% !important;
-        overflow: hidden !important;
+        overflow: visible !important;
+        position: relative;
+      }
+
+      .carousel .slider-container {
+        overflow-x: hidden !important;
+      }
+
+      .carousel .slider {
+        overflow-x: hidden !important;
+      }
+
+      /* Force single slide on mobile */
+      .carousel .slider-item {
+        width: 100% !important;
+        flex: 0 0 100% !important;
       }
 
       /* [Fix 5] Video Sizing on Mobile */
@@ -117,15 +143,16 @@
         height: auto !important;
         width: 100% !important;
         max-width: 100% !important;
-        aspect-ratio: 16/9; /* 비디오 비율 강제 유지 */
+        aspect-ratio: 16/9;
       }
 
       .carousel-item-container {
-        padding: 5px !important; /* 모바일에서 패딩 감소 */
+        padding: 10px !important;
+        width: 100%;
       }
 
       .carousel-item-container p {
-        font-size: 0.9rem !important; /* 캡션 폰트 크기 조정 */
+        font-size: 0.9rem !important;
         margin-top: 0.5rem !important;
         padding: 0 0.5rem !important;
       }
@@ -137,39 +164,62 @@
         margin-top: 1rem !important;
       }
 
-      /* [Fix 7] Force Navigation Arrows to Appear */
-      /* Bulma Carousel hides these by default on touch devices. We force them back. */
+      /* [Fix 7] Force Navigation Arrows to Appear - All possible class combinations */
       .slider-navigation-previous,
-      .slider-navigation-next {
+      .slider-navigation-next,
+      .carousel-navigation-previous,
+      .carousel-navigation-next,
+      button.slider-navigation-previous,
+      button.slider-navigation-next,
+      .slider .slider-navigation .slider-navigation-previous,
+      .slider .slider-navigation .slider-navigation-next {
         opacity: 1 !important;
         visibility: visible !important;
         display: flex !important;
-        background-color: rgba(0, 0, 0, 0.4) !important; /* 반투명 검정 배경 */
+        align-items: center !important;
+        justify-content: center !important;
+        background-color: rgba(0, 0, 0, 0.5) !important;
         color: white !important;
-        width: 40px !important;
-        height: 40px !important;
+        width: 45px !important;
+        height: 45px !important;
         border-radius: 50% !important;
-        top: 50% !important;
-        transform: translateY(-50%);
-        z-index: 99 !important;
-        border: 1px solid rgba(255,255,255,0.2) !important;
+        position: absolute !important;
+        top: 40% !important;
+        transform: translateY(-50%) !important;
+        z-index: 999 !important;
+        border: 2px solid rgba(255,255,255,0.3) !important;
+        cursor: pointer !important;
+        pointer-events: auto !important;
       }
 
       /* Arrow Icon Color Fix */
-      .slider-navigation-previous .icon,
-      .slider-navigation-next .icon,
-      .slider-navigation-previous i,
-      .slider-navigation-next i {
+      .slider-navigation-previous *,
+      .slider-navigation-next *,
+      .carousel-navigation-previous *,
+      .carousel-navigation-next * {
         color: white !important;
-        font-size: 1.2rem;
+        font-size: 1.5rem !important;
       }
 
-      /* Adjust positioning to ensure they are inside the screen */
-      .slider-navigation-previous {
-        left: 5px !important;
+      /* Positioning */
+      .slider-navigation-previous,
+      .carousel-navigation-previous,
+      button.slider-navigation-previous,
+      .slider .slider-navigation .slider-navigation-previous {
+        left: 10px !important;
       }
-      .slider-navigation-next {
-        right: 5px !important;
+
+      .slider-navigation-next,
+      .carousel-navigation-next,
+      button.slider-navigation-next,
+      .slider .slider-navigation .slider-navigation-next {
+        right: 10px !important;
+      }
+
+      /* Make sure carousel wrapper doesn't cut off arrows */
+      #results-carousel {
+        overflow: visible !important;
+        padding: 0 !important;
       }
     }
   </style>

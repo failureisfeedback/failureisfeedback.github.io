@@ -29,17 +29,36 @@ $(document).ready(function() {
 
     });
 
+    // Responsive carousel options
+    var isMobile = window.innerWidth <= 768;
     var options = {
 			slidesToScroll: 1,
-			slidesToShow: 3,
+			slidesToShow: isMobile ? 1 : 3,  // Show 1 slide on mobile, 3 on desktop
 			loop: true,
 			infinite: true,
 			autoplay: false,
 			autoplaySpeed: 3000,
+			navigation: true,  // Enable navigation arrows
+			pagination: false,  // Disable pagination dots
     }
 
 		// Initialize all div with carousel class
     var carousels = bulmaCarousel.attach('.carousel', options);
+
+    // Re-initialize carousel on window resize
+    var resizeTimer;
+    window.addEventListener('resize', function() {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function() {
+            var newIsMobile = window.innerWidth <= 768;
+            if (newIsMobile !== isMobile) {
+                isMobile = newIsMobile;
+                options.slidesToShow = isMobile ? 1 : 3;
+                // Reinitialize carousels
+                carousels = bulmaCarousel.attach('.carousel', options);
+            }
+        }, 250);
+    });
 
     // Loop on each carousel initialized
     for(var i = 0; i < carousels.length; i++) {
