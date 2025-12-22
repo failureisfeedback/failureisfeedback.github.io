@@ -101,16 +101,44 @@
   </div>
 </section>
 
-<section class="hero teaser" id="teaser">
+<section class="hero teaser">
   <div class="container is-max-desktop">
     <div class="hero-body">
-      <video id="teaser" autoplay muted loop playsinline controls height="100%">
-        <source src="./static/videos/highlight.mp4" type="video/mp4">
-      </video>
       
+      <img src="./static/images/banner.png" alt="VAP Banner" style="width: 100%; margin-bottom: 2rem;"/>
+      
+      <div id="results-carousel" class="carousel results-carousel">
+        
+        <div class="item item-camera">
+          <video poster="" id="camera" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/simpler_bridge_camera.mp4" type="video/mp4">
+          </video>
+        </div>
+        
+        <div class="item item-pen">
+          <video poster="" id="pen" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/simpler_fractal_pen_holder_matching.mp4" type="video/mp4">
+          </video>
+        </div>
+
+        <div class="item item-bag">
+          <video poster="" id="bag" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/vlabench_leather_bag.mp4" type="video/mp4">
+          </video>
+        </div>
+
+        <div class="item item-shaver">
+          <video poster="" id="shaver" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/simpler_bridge_shaver.mp4" type="video/mp4">
+          </video>
+        </div>
+
+      </div>
+
       <h2 class="subtitle has-text-centered" style="margin-top: 1rem;">
         VAP enables frozen VLA models to manipulate user-specific objects (e.g., "<i>my</i> cup") among visually similar distractors without any training.
       </h2>
+      
     </div>
   </div>
 </section>
