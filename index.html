@@ -33,24 +33,27 @@
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
-      height: 350px; /* 전체 높이 고정 (비디오 + 텍스트) */
+      min-height: 320px; /* 최소 높이만 지정하고 auto로 두어 하단 여백 제거 */
+      height: auto;
+      padding-bottom: 10px;
     }
 
-    /* Video Style: 높이를 강제로 고정하여 들쭉날쭉함 방지 */
+    /* Video Style */
     .carousel-video {
       height: 280px; /* 비디오 높이 고정 */
-      width: auto;   /* 너비는 비율에 맞춰 자동 조절 */
-      object-fit: contain; /* 영상이 잘리지 않고 다 보이게 */
+      width: auto;   /* 비율 유지 */
+      object-fit: contain; 
       border-radius: 10px;
-      margin-bottom: 10px;
+      margin-bottom: 20px; /* [수정] 글자와 영상 사이 간격 넓힘 */
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
 
     /* Caption Style */
     .carousel-caption {
-      font-size: 1rem;
+      font-size: 1.1rem;
       font-weight: 600;
       color: #4a4a4a;
+      margin-top: 0; /* 상단 마진 제거 (비디오 마진으로 컨트롤) */
     }
   </style>
 </head>
@@ -133,9 +136,20 @@
   <div class="container is-max-desktop">
     <div class="hero-body">
       
-      <div class="columns is-centered has-text-centered" style="margin-bottom: 2rem;">
+      <div class="columns is-centered has-text-centered" style="margin-bottom: 1.5rem;">
         <div class="column is-full-width">
           <img src="./static/images/banner.png" alt="VAP Banner" style="width: 100%; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);"/>
+        </div>
+      </div>
+
+      <div class="columns is-centered has-text-centered" style="margin-bottom: 2rem;">
+        <div class="column is-four-fifths">
+          <div class="content has-text-justified" style="font-size: 1.1rem;">
+            <p>
+              Imagine asking for your favorite coffee mug while getting ready for work, or having a robot fetch your pet’s specific toy from a pile of similar objects. 
+              To be truly useful in daily life, robots must discern the subtle details that distinguish <strong>"a cup"</strong> from <strong>"<i>my</i> cup."</strong>
+            </p>
+          </div>
         </div>
       </div>
 
@@ -191,16 +205,16 @@
   <div class="container is-max-desktop">
     <div class="columns is-centered has-text-centered">
       <div class="column is-four-fifths">
+        <h2 class="title is-3">From "A Cup" to "<i>MY</i> Cup"</h2>
         <div class="content has-text-justified">
-          <p style="font-size: 1.2rem; margin-bottom: 1.5rem;">
-            <span class="has-text-weight-bold is-size-4">"Robot, bring <i>my</i> cup."</span>
+          <p>
+            Standard Vision-Language-Action (VLA) models are excellent at understanding generic concepts like "pick up <em>the cup</em>." 
+            However, they fail when users ask for specific instances: <strong>"Bring <em>my</em> cup."</strong>
+            To a generic VLA, your favorite mug is just "a cup" among many others.
           </p>
           <p>
-            Imagine asking for your favorite coffee mug while getting ready for work, or having a robot fetch your pet’s specific toy from a pile of similar objects. 
-            To be truly useful in daily life, robots must discern the subtle details that distinguish <strong>"a cup"</strong> from <strong>"<i>my</i> cup."</strong>
-          </p>
-          <p>
-            However, standard VLA models struggle with these personalized nuances. <strong>Visual Attentive Prompting (VAP)</strong> bridges this gap, enabling robots to identify and manipulate your unique belongings immediately—without any training.
+            <strong>Visual Attentive Prompting (VAP)</strong> bridges this gap between <em>semantic understanding</em> and <em>instance-level control</em>.
+            By visually highlighting the target object in the robot's eye, VAP allows existing VLAs to manipulate <strong>unseen personal objects</strong> immediately—<strong>no training, no fine-tuning, just prompting.</strong>
           </p>
         </div>
       </div>
