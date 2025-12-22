@@ -27,15 +27,16 @@
   <script src="./static/js/index.js"></script>
 
   <style>
-    /* 1. Interactive Hover Effect (Subtle & Safe) */
-    .hover-effect {
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      border-radius: 8px; /* 살짝 둥글게 */
-    }
-    
-    .hover-effect:hover {
-      transform: translateY(-5px); /* 위로 살짝 뜸 */
-      box-shadow: 0 10px 20px rgba(0,0,0,0.15); /* 부드러운 그림자 */
+    /* 1. Interactive Hover Effect (PC only) */
+    @media screen and (min-width: 769px) {
+      .hover-effect {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-radius: 8px;
+      }
+      .hover-effect:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+      }
     }
 
     /* 2. Carousel Layout Logic */
@@ -47,51 +48,76 @@
       padding-bottom: 10px;
     }
 
-    /* PC Default Style */
+    /* Video Default (PC) */
     .carousel-video {
-      height: 280px;       /* PC에서는 높이 고정 (정렬 예쁨) */
-      width: auto;         /* 비율 유지 */
-      max-width: 100%;     /* 부모 영역 넘침 방지 */
+      height: 280px;       
+      width: auto;         
+      max-width: 100%;     
       object-fit: contain;
       border-radius: 10px;
       margin-bottom: 15px;
       background-color: #000;
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
-
-    /* 3. Mobile Optimization (Crucial Fix) */
-    @media screen and (max-width: 768px) {
-      /* 제목 크기 조절 */
-      .publication-title {
-        font-size: 2rem !important;
-      }
-      
-      /* 모바일에서는 높이 고정을 풀고, 너비를 화면에 꽉 채움 */
-      .carousel-video {
-        height: auto !important;   
-        width: 100% !important;    
-        max-width: 100% !important;
-        margin-bottom: 10px;
-      }
-
-      /* 배너 이미지도 모바일에서 꽉 차게 */
-      .hero-body img {
-        max-width: 100% !important;
-        height: auto !important;
-      }
-      
-      /* 좌우 여백 확보 */
-      .container {
-        padding-left: 10px;
-        padding-right: 10px;
-      }
-    }
-
-    /* Caption Styling */
+    
     .carousel-caption {
       font-size: 1.1rem;
       font-weight: 600;
       color: #4a4a4a;
+    }
+
+    /* 3. Mobile Optimization (The Fix) */
+    @media screen and (max-width: 768px) {
+      /* Title Sizing */
+      .publication-title {
+        font-size: 1.8rem !important;
+        line-height: 1.3 !important;
+      }
+      
+      /* Banner Fix: Prevent it from being too huge vertically */
+      .hero-body img.hover-effect {
+        width: 100% !important;
+        height: auto !important;
+        max-height: 300px !important; /* Limit vertical height on mobile */
+        object-fit: contain;
+      }
+
+      /* Video Fix: Fit to screen width */
+      .carousel-video {
+        height: auto !important;   
+        width: 100% !important;    
+        max-width: 100% !important;
+        aspect-ratio: 16/9; /* Force standard video ratio */
+        margin-bottom: 10px;
+      }
+      
+      /* Container Padding Adjustment */
+      .container {
+        padding-left: 15px;
+        padding-right: 15px;
+      }
+      
+      /* [Crucial] Force Navigation Arrows Visible on Mobile */
+      .slider-navigation-previous,
+      .slider-navigation-next,
+      .carousel-nav-left, 
+      .carousel-nav-right {
+        display: flex !important; /* Force show */
+        opacity: 1 !important;
+        visibility: visible !important;
+        background: rgba(255, 255, 255, 0.7) !important; /* Make circle visible */
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        z-index: 100;
+        top: 40% !important; /* Adjust vertical position */
+      }
+      
+      /* Adjust arrow icons inside */
+      .slider-navigation-previous .icon,
+      .slider-navigation-next .icon {
+        color: #333 !important;
+      }
     }
   </style>
 </head>
