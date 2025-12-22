@@ -42,78 +42,68 @@ $(document).ready(function() {
 
 	// Initialize all div with carousel class
     var carousels = bulmaCarousel.attach('.carousel', options);
-    var mainCarousel = carousels.length > 0 ? carousels[0] : null;
 
-    // Manual carousel control for mobile
-    if (isMobile && mainCarousel) {
-        var currentIndex = 0;
+    // MANUAL SLIDE CONTROL FOR MOBILE - Bypass Bulma's broken navigation
+    if (isMobile) {
+        var currentSlideIndex = 0;
         var slides = document.querySelectorAll('#results-carousel .item');
         var totalSlides = slides.length;
 
-        console.log('Manual mobile carousel initialized. Total slides:', totalSlides);
+        console.log('Setting up MANUAL slide control. Total slides:', totalSlides);
 
-        function showSlide(index) {
-            // Use Bulma Carousel's internal state if possible
-            try {
-                // Try to use the carousel's show method
-                if (mainCarousel.state && mainCarousel.state.next !== undefined) {
-                    var targetIndex = index % totalSlides;
-                    mainCarousel.state.next = targetIndex;
-
-                    // Force a re-render by calling the carousel's internal methods
-                    if (typeof mainCarousel._show === 'function') {
-                        mainCarousel._show(targetIndex);
-                    } else if (typeof mainCarousel.show === 'function') {
-                        mainCarousel.show(targetIndex);
-                    }
+        // Function to show specific slide
+        function showSlideManually(index) {
+            // Hide all slides
+            slides.forEach(function(slide, i) {
+                if (i === index) {
+                    slide.style.display = 'block';
+                    slide.style.opacity = '1';
+                    slide.style.position = 'relative';
+                } else {
+                    slide.style.display = 'none';
+                    slide.style.opacity = '0';
                 }
-                console.log('Moved to slide:', index);
-            } catch(e) {
-                console.error('Error moving carousel:', e);
-            }
+            });
+            console.log('Showing slide:', index);
         }
+
+        // Initialize - show first slide
+        showSlideManually(0);
 
         // Wire up custom navigation buttons
         var customPrevBtn = document.getElementById('custom-prev');
         var customNextBtn = document.getElementById('custom-next');
 
         if (customPrevBtn && customNextBtn) {
-            function handlePrev(e) {
+            customPrevBtn.addEventListener('click', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
-                console.log('PREV - Moving to index:', currentIndex);
+                currentSlideIndex = (currentSlideIndex - 1 + totalSlides) % totalSlides;
+                showSlideManually(currentSlideIndex);
+            });
 
-                // Try multiple methods
-                if (mainCarousel.previous && typeof mainCarousel.previous === 'function') {
-                    mainCarousel.previous();
-                } else {
-                    showSlide(currentIndex);
-                }
-            }
-
-            function handleNext(e) {
+            customPrevBtn.addEventListener('touchend', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                currentIndex = (currentIndex + 1) % totalSlides;
-                console.log('NEXT - Moving to index:', currentIndex);
+                currentSlideIndex = (currentSlideIndex - 1 + totalSlides) % totalSlides;
+                showSlideManually(currentSlideIndex);
+            });
 
-                // Try multiple methods
-                if (mainCarousel.next && typeof mainCarousel.next === 'function') {
-                    mainCarousel.next();
-                } else {
-                    showSlide(currentIndex);
-                }
-            }
+            customNextBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                currentSlideIndex = (currentSlideIndex + 1) % totalSlides;
+                showSlideManually(currentSlideIndex);
+            });
 
-            customPrevBtn.addEventListener('click', handlePrev);
-            customPrevBtn.addEventListener('touchend', handlePrev);
-            customNextBtn.addEventListener('click', handleNext);
-            customNextBtn.addEventListener('touchend', handleNext);
+            customNextBtn.addEventListener('touchend', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                currentSlideIndex = (currentSlideIndex + 1) % totalSlides;
+                showSlideManually(currentSlideIndex);
+            });
 
-            console.log('Custom buttons wired up!');
-            console.log('Carousel object:', mainCarousel);
-            console.log('Available methods:', Object.keys(mainCarousel));
+            console.log('Manual navigation buttons ready!');
         }
     }
 
@@ -124,10 +114,7 @@ $(document).ready(function() {
         resizeTimer = setTimeout(function() {
             var newIsMobile = window.innerWidth <= 768;
             if (newIsMobile !== isMobile) {
-                isMobile = newIsMobile;
-                options.slidesToShow = isMobile ? 1 : 3;
-                carousels = bulmaCarousel.attach('.carousel', options);
-                location.reload(); // Reload to reinitialize properly
+                location.reload();
             }
         }, 250);
     });
