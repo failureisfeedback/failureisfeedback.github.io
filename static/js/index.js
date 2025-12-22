@@ -43,71 +43,56 @@ $(document).ready(function() {
 	// Initialize all div with carousel class
     var carousels = bulmaCarousel.attach('.carousel', options);
 
-    // Force navigation to work on mobile
-    setTimeout(function() {
-        // Get all navigation buttons (Bulma Carousel creates these)
-        var allButtons = document.querySelectorAll('button, .slider-navigation-next, .slider-navigation-previous, [class*="navigation"]');
+    // Wire up custom navigation buttons for mobile
+    var customPrevBtn = document.getElementById('custom-prev');
+    var customNextBtn = document.getElementById('custom-next');
 
-        console.log('Found buttons:', allButtons.length);
+    if (customPrevBtn && customNextBtn && carousels.length > 0) {
+        var mainCarousel = carousels[0];
 
-        if (carousels.length > 0) {
-            var mainCarousel = carousels[0];
+        // Previous button
+        customPrevBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Custom PREV clicked');
+            if (mainCarousel && mainCarousel.previous) {
+                mainCarousel.previous();
+            }
+        });
 
-            // Attach handlers to ALL possible navigation elements
-            document.addEventListener('click', function(e) {
-                var target = e.target;
+        customPrevBtn.addEventListener('touchend', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Custom PREV touched');
+            if (mainCarousel && mainCarousel.previous) {
+                mainCarousel.previous();
+            }
+        });
 
-                // Check if click is on or inside a next button
-                if (target.closest('.slider-navigation-next') ||
-                    target.closest('[class*="next"]') ||
-                    (target.tagName === 'BUTTON' && target.className.includes('next'))) {
-                    console.log('Next button clicked');
-                    e.preventDefault();
-                    if (mainCarousel && mainCarousel.next) {
-                        mainCarousel.next();
-                    }
-                }
+        // Next button
+        customNextBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Custom NEXT clicked');
+            if (mainCarousel && mainCarousel.next) {
+                mainCarousel.next();
+            }
+        });
 
-                // Check if click is on or inside a previous button
-                if (target.closest('.slider-navigation-previous') ||
-                    target.closest('[class*="previous"]') ||
-                    (target.tagName === 'BUTTON' && target.className.includes('previous'))) {
-                    console.log('Previous button clicked');
-                    e.preventDefault();
-                    if (mainCarousel && mainCarousel.previous) {
-                        mainCarousel.previous();
-                    }
-                }
-            }, true);
+        customNextBtn.addEventListener('touchend', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Custom NEXT touched');
+            if (mainCarousel && mainCarousel.next) {
+                mainCarousel.next();
+            }
+        });
 
-            // Also handle touch events
-            document.addEventListener('touchend', function(e) {
-                var target = e.target;
-
-                if (target.closest('.slider-navigation-next') ||
-                    target.closest('[class*="next"]') ||
-                    (target.tagName === 'BUTTON' && target.className.includes('next'))) {
-                    console.log('Next button touched');
-                    e.preventDefault();
-                    if (mainCarousel && mainCarousel.next) {
-                        mainCarousel.next();
-                    }
-                }
-
-                if (target.closest('.slider-navigation-previous') ||
-                    target.closest('[class*="previous"]') ||
-                    (target.tagName === 'BUTTON' && target.className.includes('previous'))) {
-                    console.log('Previous button touched');
-                    e.preventDefault();
-                    if (mainCarousel && mainCarousel.previous) {
-                        mainCarousel.previous();
-                    }
-                }
-            }, true);
-
-            console.log('Navigation handlers attached, carousel methods:', mainCarousel.next, mainCarousel.previous);
-        }
-    }, 1000);
+        console.log('Custom navigation buttons wired up successfully!');
+        console.log('Carousel instance:', mainCarousel);
+    } else {
+        console.error('Failed to wire up custom buttons. Buttons or carousel not found.');
+    }
 
     // Re-initialize carousel on window resize
     var resizeTimer;

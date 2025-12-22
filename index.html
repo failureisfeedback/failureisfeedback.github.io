@@ -255,6 +255,47 @@
         overflow: visible !important;
         padding: 0 !important;
       }
+
+      /* Custom navigation buttons for mobile */
+      .custom-nav-btn {
+        position: absolute !important;
+        top: 40% !important;
+        transform: translateY(-50%) !important;
+        width: 55px !important;
+        height: 55px !important;
+        border-radius: 50% !important;
+        background-color: rgba(0, 0, 0, 0.7) !important;
+        border: 3px solid rgba(255, 255, 255, 0.5) !important;
+        color: white !important;
+        font-size: 1.5rem !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        z-index: 99999 !important;
+        cursor: pointer !important;
+        touch-action: manipulation !important;
+        -webkit-tap-highlight-color: rgba(255,255,255,0.3) !important;
+      }
+
+      .custom-nav-prev {
+        left: 5px !important;
+      }
+
+      .custom-nav-next {
+        right: 5px !important;
+      }
+
+      .custom-nav-btn:active {
+        background-color: rgba(0, 0, 0, 0.9) !important;
+        transform: translateY(-50%) scale(0.95) !important;
+      }
+    }
+
+    /* Desktop: hide custom buttons, show Bulma's */
+    @media screen and (min-width: 769px) {
+      .custom-nav-btn {
+        display: none !important;
+      }
     }
   </style>
 </head>
@@ -354,44 +395,54 @@
         </div>
       </div>
 
-      <div id="results-carousel" class="carousel results-carousel">
-        
-        <div class="item">
-          <div class="carousel-item-container">
-            <video poster="" id="camera" autoplay controls muted loop playsinline class="carousel-video hover-effect">
-              <source src="./static/videos/simpler_bridge_camera.mp4" type="video/mp4">
-            </video>
-            <p class="is-size-6 has-text-weight-bold has-text-centered">"Put my camera on towel"</p>
+      <div style="position: relative;">
+        <div id="results-carousel" class="carousel results-carousel">
+
+          <div class="item">
+            <div class="carousel-item-container">
+              <video poster="" id="camera" autoplay controls muted loop playsinline class="carousel-video hover-effect">
+                <source src="./static/videos/simpler_bridge_camera.mp4" type="video/mp4">
+              </video>
+              <p class="is-size-6 has-text-weight-bold has-text-centered">"Put my camera on towel"</p>
+            </div>
           </div>
-        </div>
-        
-        <div class="item">
-          <div class="carousel-item-container">
-            <video poster="" id="pen" autoplay controls muted loop playsinline class="carousel-video hover-effect">
-              <source src="./static/videos/simpler_fractal_pen_holder_matching.mp4" type="video/mp4">
-            </video>
-            <p class="is-size-6 has-text-weight-bold has-text-centered">"Pick my pen holder"</p>
+
+          <div class="item">
+            <div class="carousel-item-container">
+              <video poster="" id="pen" autoplay controls muted loop playsinline class="carousel-video hover-effect">
+                <source src="./static/videos/simpler_fractal_pen_holder_matching.mp4" type="video/mp4">
+              </video>
+              <p class="is-size-6 has-text-weight-bold has-text-centered">"Pick my pen holder"</p>
+            </div>
           </div>
+
+          <div class="item">
+            <div class="carousel-item-container">
+              <video poster="" id="bag" autoplay controls muted loop playsinline class="carousel-video hover-effect">
+                <source src="./static/videos/vlabench_leather_bag.mp4" type="video/mp4">
+              </video>
+              <p class="is-size-6 has-text-weight-bold has-text-centered">"Select my leather bag"</p>
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="carousel-item-container">
+              <video poster="" id="shaver" autoplay controls muted loop playsinline class="carousel-video hover-effect">
+                <source src="./static/videos/simpler_bridge_shaver.mp4" type="video/mp4">
+              </video>
+              <p class="is-size-6 has-text-weight-bold has-text-centered">"Pick my shaver"</p>
+            </div>
+          </div>
+
         </div>
 
-        <div class="item">
-          <div class="carousel-item-container">
-            <video poster="" id="bag" autoplay controls muted loop playsinline class="carousel-video hover-effect">
-              <source src="./static/videos/vlabench_leather_bag.mp4" type="video/mp4">
-            </video>
-            <p class="is-size-6 has-text-weight-bold has-text-centered">"Select my leather bag"</p>
-          </div>
-        </div>
-
-        <div class="item">
-          <div class="carousel-item-container">
-            <video poster="" id="shaver" autoplay controls muted loop playsinline class="carousel-video hover-effect">
-              <source src="./static/videos/simpler_bridge_shaver.mp4" type="video/mp4">
-            </video>
-            <p class="is-size-6 has-text-weight-bold has-text-centered">"Pick my shaver"</p>
-          </div>
-        </div>
-
+        <!-- Custom navigation buttons for mobile -->
+        <button id="custom-prev" class="custom-nav-btn custom-nav-prev" aria-label="Previous">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        <button id="custom-next" class="custom-nav-btn custom-nav-next" aria-label="Next">
+          <i class="fas fa-chevron-right"></i>
+        </button>
       </div>
       
       <h2 class="subtitle has-text-centered" style="margin-top: 1.5rem;">
