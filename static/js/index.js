@@ -32,18 +32,71 @@ $(document).ready(function() {
     // Responsive carousel options
     var isMobile = window.innerWidth <= 768;
     var options = {
-			slidesToScroll: 1,
-			slidesToShow: isMobile ? 1 : 3,  // Show 1 slide on mobile, 3 on desktop
-			loop: true,
-			infinite: true,
-			autoplay: false,
-			autoplaySpeed: 3000,
-			navigation: true,  // Enable navigation arrows
-			pagination: false,  // Disable pagination dots
+		slidesToScroll: 1,
+		slidesToShow: isMobile ? 1 : 3,  // Show 1 slide on mobile, 3 on desktop
+		loop: true,
+		infinite: true,
+		autoplay: false,
+		autoplaySpeed: 3000,
+		navigation: true,  // Enable navigation arrows
+		navigationKeys: true,  // Enable keyboard navigation
+		navigationSwipe: true,  // Enable swipe navigation
+		pagination: false,  // Disable pagination dots
+		effect: 'translate',  // Use translate effect
+		duration: 300,  // Animation duration
     }
 
-		// Initialize all div with carousel class
+	// Initialize all div with carousel class
     var carousels = bulmaCarousel.attach('.carousel', options);
+
+    // Force enable navigation on mobile by manually adding click handlers
+    if (isMobile && carousels.length > 0) {
+        var carousel = carousels[0];
+
+        // Find and attach click handlers to navigation buttons after carousel initializes
+        setTimeout(function() {
+            var prevButtons = document.querySelectorAll('.slider-navigation-previous');
+            var nextButtons = document.querySelectorAll('.slider-navigation-next');
+
+            prevButtons.forEach(function(btn) {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (carousel && carousel.previous) {
+                        carousel.previous();
+                    }
+                }, true);
+
+                btn.addEventListener('touchend', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (carousel && carousel.previous) {
+                        carousel.previous();
+                    }
+                }, true);
+            });
+
+            nextButtons.forEach(function(btn) {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (carousel && carousel.next) {
+                        carousel.next();
+                    }
+                }, true);
+
+                btn.addEventListener('touchend', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (carousel && carousel.next) {
+                        carousel.next();
+                    }
+                }, true);
+            });
+
+            console.log('Mobile navigation handlers attached');
+        }, 500);  // Wait for carousel to fully initialize
+    }
 
     // Re-initialize carousel on window resize
     var resizeTimer;
