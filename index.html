@@ -9,7 +9,6 @@
   <title>Bring My Cup! Personalizing Vision-Language-Action Models with Visual Attentive Prompting</title>
 
   <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
-
   <link rel="stylesheet" href="./static/css/bulma.min.css">
   <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
@@ -17,51 +16,63 @@
   <link rel="icon" href="./static/images/favicon.png" type="image/png">
 
   <script defer src="./static/js/fontawesome.all.min.js"></script>
-
   <style>
-    /* 1. 기본 레이아웃 */
+    /* 1. Global Reset (가로 스크롤 방지) */
     html, body {
       overflow-x: hidden;
       width: 100%;
+      margin: 0;
+      padding: 0;
     }
 
-    /* 2. 배너 이미지 반응형 처리 */
-    .banner-image {
+    /* 2. Banner Image Fix */
+    .banner-container {
       width: 100%;
+      padding: 0 10px; /* 좌우 여백 */
+      box-sizing: border-box;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+    
+    .banner-image {
+      max-width: 100%; /* 부모 너비 넘지 않음 */
       height: auto;
       border-radius: 10px;
       box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      display: block;
+      margin: 0 auto;
     }
 
-    /* 3. 커스텀 비디오 카루셀 (라이브러리 제거 버전) */
-    .custom-carousel {
+    /* 3. Pure CSS Carousel (모바일 최적화) */
+    .video-slider-wrapper {
       position: relative;
       width: 100%;
-      max-width: 1000px;
+      max-width: 1000px; /* PC 최대 너비 */
       margin: 0 auto;
-      overflow: hidden; /* 넘치는 부분 숨김 */
+      padding: 0 10px; /* 좌우 여백 */
+      box-sizing: border-box;
     }
 
-    .carousel-track {
+    .video-slider {
       display: flex;
-      gap: 20px;
-      overflow-x: auto; /* 가로 스크롤 허용 */
-      scroll-behavior: smooth;
-      padding: 10px 5px;
-      
-      /* 스크롤바 숨기기 */
-      -ms-overflow-style: none;  /* IE and Edge */
-      scrollbar-width: none;  /* Firefox */
-    }
-    
-    .carousel-track::-webkit-scrollbar {
-      display: none; /* Chrome, Safari, Opera */
+      gap: 15px;
+      overflow-x: auto; /* 가로 스크롤 활성화 */
+      scroll-snap-type: x mandatory; /* 스냅 기능 */
+      padding-bottom: 10px;
+      -webkit-overflow-scrolling: touch; /* iOS 부드러운 스크롤 */
+      scrollbar-width: none; /* 파이어폭스 스크롤바 숨김 */
     }
 
-    /* 비디오 카드 스타일 */
+    .video-slider::-webkit-scrollbar {
+      display: none; /* 크롬/사파리 스크롤바 숨김 */
+    }
+
     .video-card {
-      flex: 0 0 auto; /* 크기 줄어들지 않음 */
-      width: 320px;   /* PC 기본 너비 */
+      flex: 0 0 300px; /* [PC] 기본 카드 너비 */
+      scroll-snap-align: center; /* 스크롤 시 중앙 정렬 */
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -69,66 +80,72 @@
 
     .video-card video {
       width: 100%;
-      height: 240px; /* 비디오 높이 통일 */
-      object-fit: contain;
-      border-radius: 10px;
+      height: 225px; /* 영상 높이 통일 */
+      object-fit: contain; /* 비율 유지 */
       background: #000;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      border-radius: 10px;
     }
 
     .video-caption {
-      margin-top: 10px;
+      margin-top: 8px;
       font-weight: 600;
       font-size: 0.9rem;
-      color: #4a4a4a;
+      color: #333;
       text-align: center;
     }
 
-    /* 네비게이션 버튼 스타일 */
-    .nav-btn {
+    /* 네비게이션 버튼 (PC/모바일 공통 디자인) */
+    .nav-button {
       position: absolute;
-      top: 40%; /* 비디오 중앙쯤 위치 */
+      top: 40%; /* 영상 중앙 높이 */
       transform: translateY(-50%);
-      background-color: rgba(0, 0, 0, 0.6);
-      color: white;
-      border: none;
       width: 40px;
       height: 40px;
+      background: rgba(0,0,0,0.6);
+      color: white;
+      border: none;
       border-radius: 50%;
       cursor: pointer;
-      z-index: 10;
+      z-index: 20;
       display: flex;
       align-items: center;
       justify-content: center;
       transition: background 0.3s;
     }
+    .nav-button:hover { background: rgba(0,0,0,0.8); }
+    .prev-btn { left: 0; }
+    .next-btn { right: 0; }
 
-    .nav-btn:hover { background-color: rgba(0, 0, 0, 0.8); }
-    .prev-btn { left: 10px; }
-    .next-btn { right: 10px; }
-
-    /* 4. 모바일 최적화 */
+    /* 4. 모바일 전용 스타일 (미디어 쿼리) */
     @media screen and (max-width: 768px) {
-      .hero-body { padding: 1.5rem 1rem; }
-      
-      .publication-title { font-size: 1.8rem !important; }
-      
-      /* 모바일에서는 비디오를 화면 너비에 맞춤 */
-      .video-card {
-        width: 85vw; /* 화면의 85% 차지 */
-      }
-      
-      .video-card video {
-        height: auto; /* 비율 유지 */
-        aspect-ratio: 4/3;
+      .publication-title {
+        font-size: 1.8rem !important;
       }
 
-      /* 버튼 크기 키우기 (터치 용이) */
-      .nav-btn {
-        width: 50px;
-        height: 50px;
+      /* 배너: 모바일에서도 꽉 차게 */
+      .banner-image {
+        width: 100%; 
+      }
+
+      /* 비디오 카드: 모바일에서는 화면의 85% 차지 (다음 카드가 살짝 보이게) */
+      .video-card {
+        flex: 0 0 85%; 
+        margin-right: 10px;
+      }
+
+      .video-card video {
+        height: auto; /* 높이 자동 조절 */
+        aspect-ratio: 4/3; /* 비율 고정 */
+      }
+
+      /* 버튼 크기 키움 (터치 쉽게) */
+      .nav-button {
+        width: 45px;
+        height: 45px;
         font-size: 1.2rem;
       }
+      .prev-btn { left: 5px; }
+      .next-btn { right: 5px; }
     }
   </style>
 </head>
@@ -144,12 +161,10 @@
           <div class="is-size-5 publication-authors">
             <span class="author-block">
               <a href="https://leesangoh.github.io/" target="_blank">Sangoh Lee</a>
-            </span>
-            ,
+            </span>,
             <span class="author-block">
               <a href="https://sites.google.com/view/sangwoomo" target="_blank">Sangwoo Mo</a>
-            </span>
-            ,
+            </span>,
             <span class="author-block">
               <a href="https://wscrony.github.io/" target="_blank">Wook-Shin Han</a>
             </span>
@@ -195,12 +210,8 @@
 
 <section class="hero teaser">
   <div class="container is-max-desktop">
-    <div class="hero-body">
-      
-      <div class="columns is-centered has-text-centered" style="margin-bottom: 1.5rem;">
-        <div class="column is-12">
-          <img src="./static/images/banner.png" alt="VAP Banner" class="banner-image"/>
-        </div>
+    <div class="hero-body" style="padding-top:0;"> <div class="banner-container">
+        <img src="./static/images/banner.png" alt="VAP Banner" class="banner-image"/>
       </div>
 
       <div class="columns is-centered has-text-centered" style="margin-bottom: 2rem;">
@@ -214,46 +225,45 @@
         </div>
       </div>
 
-      <div class="custom-carousel">
-        <button class="nav-btn prev-btn" onclick="scrollCarousel(-1)"><i class="fas fa-chevron-left"></i></button>
-        
-        <div class="carousel-track" id="videoTrack">
+      <div class="video-slider-wrapper">
+        <button class="nav-button prev-btn" onclick="slideVideos(-1)"><i class="fas fa-chevron-left"></i></button>
+        <button class="nav-button next-btn" onclick="slideVideos(1)"><i class="fas fa-chevron-right"></i></button>
+
+        <div class="video-slider" id="videoSlider">
           
           <div class="video-card">
-            <video autoplay controls muted loop playsinline>
+            <video autoplay controls muted loop playsinline poster="">
               <source src="./static/videos/simpler_bridge_camera.mp4" type="video/mp4">
             </video>
             <p class="video-caption">"Put my camera on towel"</p>
           </div>
 
           <div class="video-card">
-            <video autoplay controls muted loop playsinline>
+            <video autoplay controls muted loop playsinline poster="">
               <source src="./static/videos/simpler_fractal_pen_holder_matching.mp4" type="video/mp4">
             </video>
             <p class="video-caption">"Pick my pen holder"</p>
           </div>
 
           <div class="video-card">
-            <video autoplay controls muted loop playsinline>
+            <video autoplay controls muted loop playsinline poster="">
               <source src="./static/videos/vlabench_leather_bag.mp4" type="video/mp4">
             </video>
             <p class="video-caption">"Select my leather bag"</p>
           </div>
 
           <div class="video-card">
-            <video autoplay controls muted loop playsinline>
+            <video autoplay controls muted loop playsinline poster="">
               <source src="./static/videos/simpler_bridge_shaver.mp4" type="video/mp4">
             </video>
             <p class="video-caption">"Pick my shaver"</p>
           </div>
 
         </div>
-
-        <button class="nav-btn next-btn" onclick="scrollCarousel(1)"><i class="fas fa-chevron-right"></i></button>
       </div>
       
       <h2 class="subtitle has-text-centered" style="margin-top: 1.5rem;">
-        <span style="font-weight: 700;">VAP</span> enables frozen VLA models to manipulate user-specific objects among visually similar distractors.
+        <span class="dnerf" style="font-weight:700;">VAP</span> enables frozen VLA models to manipulate user-specific objects among visually similar distractors.
       </h2>
 
     </div>
@@ -359,17 +369,11 @@ Experiments show that VAP consistently outperforms generic policies and token-le
         <h2 class="title is-3">Qualitative Results</h2>
         <div class="content has-text-justified">
           <p>
-            We evaluate VAP on three challenging simulation benchmarks. In each task, the robot must identify and manipulate a <strong>user-specific object</strong> (e.g., "my shaver") while ignoring visually similar distractors present in the scene.
-            The videos below demonstrate how VAP successfully grounds the target instance and guides the frozen VLA policy to complete the task.
+            We evaluate VAP on three challenging simulation benchmarks. The videos below demonstrate how VAP successfully grounds the target instance and guides the frozen VLA policy to complete the task.
           </p>
         </div>
 
         <h3 class="title is-4" style="margin-top: 2rem;">1. Personalized-SIMPLER (WidowX)</h3>
-        <div class="content has-text-justified">
-          <p>
-            Evaluation on the WidowX arm using the Bridge dataset setting. These tasks involve pick-and-place operations in cluttered environments where distractors closely resemble the target object.
-          </p>
-        </div>
         <div class="columns is-multiline">
           <div class="column is-half">
             <div class="content">
@@ -406,11 +410,6 @@ Experiments show that VAP consistently outperforms generic policies and token-le
         </div>
 
         <h3 class="title is-4" style="margin-top: 2rem;">2. Personalized-SIMPLER (Google Robot)</h3>
-        <div class="content has-text-justified">
-          <p>
-             Evaluation on the Google Robot using the Fractal dataset setting. We test robustness across 'Visual Matching' (seen environments) and 'Visual Variant' (unseen backgrounds/lighting) tracks.
-          </p>
-        </div>
         <div class="columns is-multiline">
           <div class="column is-half">
             <div class="content">
@@ -447,11 +446,6 @@ Experiments show that VAP consistently outperforms generic policies and token-le
         </div>
 
         <h3 class="title is-4" style="margin-top: 2rem;">3. Personalized-VLABench</h3>
-        <div class="content has-text-justified">
-          <p>
-            Multi-view selection tasks on a Franka Emika Panda arm. The agent must identify the correct user object from three camera views (Front, Side, Wrist) and touch it.
-          </p>
-        </div>
         <div class="columns is-multiline">
           <div class="column is-one-third">
             <div class="content">
@@ -511,8 +505,7 @@ Experiments show that VAP consistently outperforms generic policies and token-le
         <img src="./static/images/table3.png" alt="Table 3 Results" style="width:100%;">
         <div class="content has-text-justified" style="margin-top: 0.5rem;">
           <p>
-            On the WidowX arm using the Bridge dataset, tasks involve precise pick-and-place in cluttered scenes. 
-            While baselines often fail to identify the correct instance (resulting in near-zero success for hard prompts), VAP achieves high success rates across all tasks, effectively grounding the user's object even when visually similar distractors are present.
+            On the WidowX arm using the Bridge dataset, VAP achieves high success rates across all tasks, effectively grounding the user's object even when visually similar distractors are present.
           </p>
         </div>
       </div>
@@ -526,8 +519,7 @@ Experiments show that VAP consistently outperforms generic policies and token-le
         <img src="./static/images/table2.png" alt="Table 2 Results" style="width:100%;">
         <div class="content has-text-justified" style="margin-top: 0.5rem;">
           <p>
-            We evaluate robustness on the Google Robot (Fractal) across 'Visual Matching' (seen environments) and 'Visual Variant' (unseen backgrounds/lighting) tracks. 
-            VAP significantly outperforms generic policies and text-based prompts. Notably, in the challenging <strong>Visual Variant</strong> track, VAP maintains a strong success rate of 58.2%, whereas the best baseline drops to 17.3%, demonstrating superior generalization to novel visual conditions.
+            VAP significantly outperforms generic policies and text-based prompts. Notably, in the challenging <strong>Visual Variant</strong> track, VAP maintains a strong success rate of 58.2%.
           </p>
         </div>
       </div>
@@ -541,8 +533,7 @@ Experiments show that VAP consistently outperforms generic policies and token-le
         <img src="./static/images/table4.png" alt="Table 4 Results" style="width:100%;">
         <div class="content has-text-justified" style="margin-top: 0.5rem;">
           <p>
-            In multi-view selection tasks with a Franka Emika Panda, the agent must handle occlusion and consistency across front, side, and wrist cameras.
-            VAP achieves the highest Success Rate (SR) across all 5 object categories, proving its ability to aggregate visual cues from multiple viewpoints to resolve ambiguity.
+            VAP achieves the highest Success Rate (SR) across all 5 object categories in multi-view selection tasks.
           </p>
         </div>
       </div>
@@ -556,8 +547,7 @@ Experiments show that VAP consistently outperforms generic policies and token-le
         <img src="./static/images/figure5.png" alt="Real-world Results" style="width:100%;">
         <div class="content has-text-justified" style="margin-top: 0.5rem;">
           <p>
-            We validate VAP on a physical tabletop setup with a SO-101 arm using 8 everyday object categories. 
-            VAP (yellow bars) consistently outperforms baselines (blue/green/red) in both pointing and pick-and-place tasks, confirming that our training-free visual prompting method transfers reliably to the real world with unseen physical objects.
+            We validate VAP on a physical tabletop setup. VAP (yellow bars) consistently outperforms baselines (blue/green/red).
           </p>
         </div>
       </div>
@@ -610,15 +600,14 @@ Experiments show that VAP consistently outperforms generic policies and token-le
 </footer>
 
 <script>
-  function scrollCarousel(direction) {
-    const track = document.getElementById('videoTrack');
-    // 비디오 카드 너비(320) + gap(20) = 340px 씩 이동
-    const scrollAmount = 340; 
+  function slideVideos(direction) {
+    const slider = document.getElementById('videoSlider');
+    const scrollAmount = 320; // 카드 너비 + 갭 대략적인 값
     
     if (direction === 1) {
-      track.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+      slider.scrollBy({ left: scrollAmount, behavior: 'smooth' });
     } else {
-      track.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+      slider.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
     }
   }
 </script>
