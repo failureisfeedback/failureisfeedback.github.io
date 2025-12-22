@@ -33,70 +33,81 @@ $(document).ready(function() {
     var isMobile = window.innerWidth <= 768;
     var options = {
 		slidesToScroll: 1,
-		slidesToShow: isMobile ? 1 : 3,  // Show 1 slide on mobile, 3 on desktop
+		slidesToShow: isMobile ? 1 : 3,
 		loop: true,
 		infinite: true,
 		autoplay: false,
 		autoplaySpeed: 3000,
-		navigation: true,  // Enable navigation arrows
-		navigationKeys: true,  // Enable keyboard navigation
-		navigationSwipe: true,  // Enable swipe navigation
-		pagination: false,  // Disable pagination dots
-		effect: 'translate',  // Use translate effect
-		duration: 300,  // Animation duration
     }
 
 	// Initialize all div with carousel class
     var carousels = bulmaCarousel.attach('.carousel', options);
 
-    // Force enable navigation on mobile by manually adding click handlers
-    if (isMobile && carousels.length > 0) {
-        var carousel = carousels[0];
+    // Force navigation to work on mobile
+    setTimeout(function() {
+        // Get all navigation buttons (Bulma Carousel creates these)
+        var allButtons = document.querySelectorAll('button, .slider-navigation-next, .slider-navigation-previous, [class*="navigation"]');
 
-        // Find and attach click handlers to navigation buttons after carousel initializes
-        setTimeout(function() {
-            var prevButtons = document.querySelectorAll('.slider-navigation-previous');
-            var nextButtons = document.querySelectorAll('.slider-navigation-next');
+        console.log('Found buttons:', allButtons.length);
 
-            prevButtons.forEach(function(btn) {
-                btn.addEventListener('click', function(e) {
+        if (carousels.length > 0) {
+            var mainCarousel = carousels[0];
+
+            // Attach handlers to ALL possible navigation elements
+            document.addEventListener('click', function(e) {
+                var target = e.target;
+
+                // Check if click is on or inside a next button
+                if (target.closest('.slider-navigation-next') ||
+                    target.closest('[class*="next"]') ||
+                    (target.tagName === 'BUTTON' && target.className.includes('next'))) {
+                    console.log('Next button clicked');
                     e.preventDefault();
-                    e.stopPropagation();
-                    if (carousel && carousel.previous) {
-                        carousel.previous();
+                    if (mainCarousel && mainCarousel.next) {
+                        mainCarousel.next();
                     }
-                }, true);
+                }
 
-                btn.addEventListener('touchend', function(e) {
+                // Check if click is on or inside a previous button
+                if (target.closest('.slider-navigation-previous') ||
+                    target.closest('[class*="previous"]') ||
+                    (target.tagName === 'BUTTON' && target.className.includes('previous'))) {
+                    console.log('Previous button clicked');
                     e.preventDefault();
-                    e.stopPropagation();
-                    if (carousel && carousel.previous) {
-                        carousel.previous();
+                    if (mainCarousel && mainCarousel.previous) {
+                        mainCarousel.previous();
                     }
-                }, true);
-            });
+                }
+            }, true);
 
-            nextButtons.forEach(function(btn) {
-                btn.addEventListener('click', function(e) {
+            // Also handle touch events
+            document.addEventListener('touchend', function(e) {
+                var target = e.target;
+
+                if (target.closest('.slider-navigation-next') ||
+                    target.closest('[class*="next"]') ||
+                    (target.tagName === 'BUTTON' && target.className.includes('next'))) {
+                    console.log('Next button touched');
                     e.preventDefault();
-                    e.stopPropagation();
-                    if (carousel && carousel.next) {
-                        carousel.next();
+                    if (mainCarousel && mainCarousel.next) {
+                        mainCarousel.next();
                     }
-                }, true);
+                }
 
-                btn.addEventListener('touchend', function(e) {
+                if (target.closest('.slider-navigation-previous') ||
+                    target.closest('[class*="previous"]') ||
+                    (target.tagName === 'BUTTON' && target.className.includes('previous'))) {
+                    console.log('Previous button touched');
                     e.preventDefault();
-                    e.stopPropagation();
-                    if (carousel && carousel.next) {
-                        carousel.next();
+                    if (mainCarousel && mainCarousel.previous) {
+                        mainCarousel.previous();
                     }
-                }, true);
-            });
+                }
+            }, true);
 
-            console.log('Mobile navigation handlers attached');
-        }, 500);  // Wait for carousel to fully initialize
-    }
+            console.log('Navigation handlers attached, carousel methods:', mainCarousel.next, mainCarousel.previous);
+        }
+    }, 1000);
 
     // Re-initialize carousel on window resize
     var resizeTimer;
@@ -107,7 +118,6 @@ $(document).ready(function() {
             if (newIsMobile !== isMobile) {
                 isMobile = newIsMobile;
                 options.slidesToShow = isMobile ? 1 : 3;
-                // Reinitialize carousels
                 carousels = bulmaCarousel.attach('.carousel', options);
             }
         }, 250);
